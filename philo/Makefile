@@ -3,13 +3,15 @@
 NAME = philo
 
 CC = @cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=thread
 
 # -fsanitize=address
 # -fsanitize=thread
 
 SRC =	main.c	\
 		mutex_utils.c	\
+		routine.c	\
+		static.c	\
 		utils.c	\
 
 lib = lib
@@ -76,7 +78,7 @@ IWhite='\033[0;97m'       # White
 BIBlack='\033[1;90m'      # Black
 BIRed='\033[1;91m'        # Red
 BIGreen='\033[1;92m'      # Green
-BIYellow='\033[ft_printf1;93m'     # Yellow
+BIYellow='\033[1;93m'     # Yellow
 BIBlue='\033[1;94m'       # Blue
 BIPurple='\033[1;95m'     # Purple
 BICyan='\033[1;96m'       # Cyan
@@ -103,7 +105,7 @@ $(LIB):
 	@make -s -C $(lib)
 
 $(NAME): $(LIB) $(OBJS)
-	@$(CC) $(CFLAGS) $(SRCS) $(LIB) -o $(NAME)
+	@$(CC) $(CFLAGS) $(SRCS) $(LIB) -lpthread -o $(NAME)
 	$(MSG1)
 	${HOWTO}
 
@@ -118,5 +120,8 @@ clean:
 fclean: clean
 	@/bin/rm -rf $(NAME) ${OBJ_DIR} $(LIB)
 	$(MSG3)
+
+val:
+	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./philo 5 800 200 200
 
 re: fclean all

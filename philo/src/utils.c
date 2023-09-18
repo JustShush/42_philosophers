@@ -6,11 +6,11 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/12 14:49:33 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:30:24 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header.h"
+#include "../philo.h"
 
 int	error(int op, char *arg)
 {
@@ -24,13 +24,19 @@ int	error(int op, char *arg)
 	return (1);
 }
 
-// get time in ms
-time_t	gettime(void)
+
+time_t	baittime()
 {
 	struct timeval time;
 
 	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	return (((time.tv_sec * 1000) + (time.tv_usec / 1000)));
+}
+
+// get time in ms
+time_t	gettime(t_mesa *mesa)
+{
+	return (baittime() - mesa->start_run);
 }
 
 void	vars_init(t_mesa *mesa)
@@ -41,10 +47,12 @@ void	vars_init(t_mesa *mesa)
 	mesa->tts = 0;
 	mesa->notepme = 0;
 	mesa->ms = 0;
+	mesa->died = 0;
 }
 
 void	free_thread(t_mesa *mesa)
 {
 	free(mesa->thread);
 	free(mesa->philo);
+	free(mesa->mutex_fork);
 }
