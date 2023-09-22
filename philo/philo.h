@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:53:13 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/18 15:05:52 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:15:22 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ time_t	gettime(t_mesa *mesa);
 time_t	baittime(void);
 void	vars_init(t_mesa *mesa);
 void	free_thread(t_mesa *mesa);
+void	p_state(t_philo *philo, char *c, char *str);
 // ---------------
 
 #endif

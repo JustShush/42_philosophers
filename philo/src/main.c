@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/18 16:30:37 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:56:28 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,20 @@ int	die(t_philo *philo)
 	i = 0;
 	while (i < philo->Mesa->n_philo)
 	{
-		//printf("time:%ld | calc:%d", gettime(philo->Mesa), (gettime(philo->Mesa) > (philo->last_eaten + philo->Mesa->ttd + 1)));
-		pthread_mutex_lock(&philo->Mesa->somebody_died);
+		pthread_mutex_lock(&philo->Mesa->check);
 		if (gettime(philo->Mesa) > (philo->last_eaten + philo->Mesa->ttd + 1))
 		{
 			printf("%s%ld %d died\n%s", BIRED, gettime(philo->Mesa), philo->id
 				+ 1, RESET);
+			pthread_mutex_lock(&philo->Mesa->somebody_died);
 			philo->Mesa->died = 1;
 			pthread_mutex_unlock(&philo->Mesa->somebody_died);
+			pthread_mutex_unlock(&philo->Mesa->check);
 			return (1);
 		}
-		pthread_mutex_unlock(&philo->Mesa->somebody_died);
+		pthread_mutex_unlock(&philo->Mesa->check);
 		i++;
 	}
-	pthread_mutex_unlock(&philo->Mesa->somebody_died);
-
 	return (0);
 }
 
@@ -69,7 +68,6 @@ t_philo	philo_mesa_init(t_mesa *mesa)
 void	*check_thread(void *arg){
 	t_philo	*philo;
 
-	printf("sssssssssssssssssssssssssssssssss\n");
 	philo = (t_philo *)arg;
 	while (1)
 	{
@@ -88,9 +86,9 @@ int	create_threads(t_mesa *mesa)
 	int	i;
 
 	i = 0;
-	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
 	mesa->philo = (t_philo *)malloc(sizeof(t_philo) * mesa->n_philo);
 	mesa->thread = malloc(sizeof(pthread_t) * mesa->n_philo);
+	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
 	while (i < mesa->n_philo)
 	{
 		mesa->philo[i] = philo_mesa_init(mesa);

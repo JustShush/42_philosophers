@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/18 13:30:24 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:45:30 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ int	error(int op, char *arg)
 	return (1);
 }
 
-
-time_t	baittime()
+time_t	baittime(void)
 {
-	struct timeval time;
+	struct timeval	time;
 
 	gettimeofday(&time, NULL);
 	return (((time.tv_sec * 1000) + (time.tv_usec / 1000)));
@@ -55,4 +54,11 @@ void	free_thread(t_mesa *mesa)
 	free(mesa->thread);
 	free(mesa->philo);
 	free(mesa->mutex_fork);
+}
+
+void	p_state(t_philo *philo, char *c, char *str)
+{
+	pthread_mutex_lock(&philo->Mesa->somebody_died);
+	printf("%s%ld %d %s%s\n", c, gettime(philo->Mesa), philo->id + 1, str, RESET);
+	pthread_mutex_unlock(&philo->Mesa->somebody_died);
 }
