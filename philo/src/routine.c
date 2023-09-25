@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 14:16:17 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/22 16:10:16 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:38:20 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ void	eating(t_philo *philo)
 		impar(philo);
 	//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
 	//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
-	philo->last_eaten = gettime(philo->Mesa);
-	pthread_mutex_lock(&philo->Mesa->check);
+	pthread_mutex_lock(&philo->Mesa->full);
+	philo->last_eaten = gettime(philo);
+	printf("last_eaten: %ld\n", philo->last_eaten);
 	if (philo->Mesa->notepme > 0)
 		philo->times_eaten++;
 	if (philo->times_eaten == philo->Mesa->notepme)
 		philo->Mesa->all_full++;
-	pthread_mutex_unlock(&philo->Mesa->check);
+	//printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
+	pthread_mutex_unlock(&philo->Mesa->full);
 }
 
 void	my_sleep(t_philo *philo)
@@ -68,6 +70,7 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	philo->fork_l = (philo->id + 1) % philo->Mesa->n_philo;
 	philo->fork_r = philo->id;
+	philo->times_eaten = 0;
 	while (1)
 	{
 		/* if (philo->id + 1 % 2 == 0)
@@ -80,6 +83,7 @@ void	*routine(void *arg)
 			pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
 			pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
 			break ;
+			//exit (0);
 		}
 		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
 		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);

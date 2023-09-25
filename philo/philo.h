@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:53:13 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/22 15:15:22 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:38:49 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_mesa
 	pthread_mutex_t *mutex_fork;
 	pthread_mutex_t somebody_died;
 	pthread_mutex_t check;
+	pthread_mutex_t full;
 	int	died;
 }		t_mesa;
 
@@ -74,7 +75,7 @@ t_mesa	*Mesa(void);
 // in utils.c
 
 int		error(int op, char *arg);
-time_t	gettime(t_mesa *mesa);
+time_t	gettime(t_philo *philo);
 time_t	baittime(void);
 void	vars_init(t_mesa *mesa);
 void	free_thread(t_mesa *mesa);

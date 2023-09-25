@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/22 15:45:30 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:39:01 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ time_t	baittime(void)
 }
 
 // get time in ms
-time_t	gettime(t_mesa *mesa)
+time_t	gettime(t_philo *philo)
 {
-	return (baittime() - mesa->start_run);
+	return (baittime() - philo->Mesa->start_run);
 }
 
 void	vars_init(t_mesa *mesa)
@@ -47,6 +47,7 @@ void	vars_init(t_mesa *mesa)
 	mesa->notepme = 0;
 	mesa->ms = 0;
 	mesa->died = 0;
+	mesa->all_full = 0;
 }
 
 void	free_thread(t_mesa *mesa)
@@ -59,6 +60,6 @@ void	free_thread(t_mesa *mesa)
 void	p_state(t_philo *philo, char *c, char *str)
 {
 	pthread_mutex_lock(&philo->Mesa->somebody_died);
-	printf("%s%ld %d %s%s\n", c, gettime(philo->Mesa), philo->id + 1, str, RESET);
+	printf("%s%ld %d %s%s\n", c, gettime(philo), philo->id + 1, str, RESET);
 	pthread_mutex_unlock(&philo->Mesa->somebody_died);
 }
