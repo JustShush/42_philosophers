@@ -11,7 +11,6 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=thread
 SRC =	main.c	\
 		mutex_utils.c	\
 		routine.c	\
-		static.c	\
 		utils.c	\
 
 lib = lib

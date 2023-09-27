@@ -43,16 +43,18 @@ typedef struct s_mesa
 	int	tte;
 	int	tts;
 	int	notepme;
-	int	ms;
 	int	all_full;
 	time_t	start_run;
 	t_philo *philo;
 	pthread_t *thread;
 	pthread_t check_thread;
 	pthread_mutex_t *mutex_fork;
-	pthread_mutex_t somebody_died;
+	pthread_mutex_t getime;
 	pthread_mutex_t check;
+	pthread_mutex_t check_fork;
 	pthread_mutex_t full;
+	pthread_mutex_t full_check;
+	pthread_mutex_t print;
 	int	died;
 }		t_mesa;
 
@@ -65,11 +67,6 @@ void	mutex_destroy(t_mesa *mesa);
 // in routine.c
 
 void	*routine(void *arg);
-// ---------------
-
-// in static.c
-
-t_mesa	*Mesa(void);
 // ---------------
 
 // in utils.c

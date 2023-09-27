@@ -41,8 +41,8 @@ int	die(t_philo *philo)
 	//printf("%p\n", &philo->Mesa->somebody_died);
 	while (i < philo->Mesa->n_philo)
 	{
-		printf("gettime:%ld | philo->last_eaten: %ld | philo->Mesa->ttd: %d\n", gettime(philo), philo->last_eaten, philo->Mesa->ttd + 1);
-		if (pthread_mutex_lock(&philo->Mesa->somebody_died) != 0)
+		//printf("gettime:%ld | philo->last_eaten: %ld | philo->Mesa->ttd: %d\n", gettime(philo), philo->last_eaten, philo->Mesa->ttd + 1);
+		if (pthread_mutex_lock(&philo->Mesa->getime) != 0)
 			printf("file:%s | line:%d", __FILE__, __LINE__);
 		//printf("run:%ld\n", philo->Mesa->start_run);
 		if (gettime(philo) > (philo->last_eaten + philo->Mesa->ttd + 1))
@@ -52,13 +52,13 @@ int	die(t_philo *philo)
 				+ 1, RESET);
 			philo->Mesa->died = 1;
 			pthread_mutex_unlock(&philo->Mesa->check);
-			if (pthread_mutex_unlock(&philo->Mesa->somebody_died) != 0)
+			if (pthread_mutex_unlock(&philo->Mesa->getime) != 0)
 				printf("file:%s | line:%d", __FILE__, __LINE__);
 			return (1);
 		}
 		i++;
 		//pthread_mutex_unlock(&philo->Mesa->somebody_died);
-		if (pthread_mutex_unlock(&philo->Mesa->somebody_died) != 0)
+		if (pthread_mutex_unlock(&philo->Mesa->getime) != 0)
 			printf("file:%s | line:%d", __FILE__, __LINE__);
 	}
 	return (0);
@@ -74,14 +74,14 @@ t_philo	philo_mesa_init(t_mesa *mesa)
 
 int	full(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->Mesa->full);
+	pthread_mutex_lock(&philo->Mesa->full_check);
 	// /printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
 	if (philo->Mesa->all_full == philo->Mesa->n_philo)
 	{
-		pthread_mutex_unlock(&philo->Mesa->full);
+		pthread_mutex_unlock(&philo->Mesa->full_check);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->Mesa->full);
+	pthread_mutex_unlock(&philo->Mesa->full_check);
 	return (0);
 }
 

@@ -14,9 +14,12 @@
 
 void	more_mutex_init(t_mesa *mesa)
 {
-	pthread_mutex_init(&mesa->somebody_died, NULL);
+	pthread_mutex_init(&mesa->getime, NULL);
 	pthread_mutex_init(&mesa->check, NULL);
+	pthread_mutex_init(&mesa->check_fork, NULL);
 	pthread_mutex_init(&mesa->full, NULL);
+	pthread_mutex_init(&mesa->full_check, NULL);
+	pthread_mutex_init(&mesa->print, NULL);
 }
 
 void	mutex_init(t_mesa *mesa)
@@ -35,9 +38,12 @@ void	mutex_init(t_mesa *mesa)
 
 void	more_mutex_destroy(t_mesa *mesa)
 {
-	pthread_mutex_destroy(&mesa->somebody_died);
+	pthread_mutex_destroy(&mesa->getime);
 	pthread_mutex_destroy(&mesa->check);
+	pthread_mutex_destroy(&mesa->check_fork);
 	pthread_mutex_destroy(&mesa->full);
+	pthread_mutex_destroy(&mesa->full_check);
+	pthread_mutex_destroy(&mesa->print);
 }
 
 void	mutex_destroy(t_mesa *mesa)

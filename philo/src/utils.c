@@ -45,7 +45,6 @@ void	vars_init(t_mesa *mesa)
 	mesa->tte = 0;
 	mesa->tts = 0;
 	mesa->notepme = 0;
-	mesa->ms = 0;
 	mesa->died = 0;
 	mesa->all_full = 0;
 }
@@ -59,7 +58,7 @@ void	free_thread(t_mesa *mesa)
 
 void	p_state(t_philo *philo, char *c, char *str)
 {
-	pthread_mutex_lock(&philo->Mesa->somebody_died);
+	pthread_mutex_lock(&philo->Mesa->print);
 	printf("%s%ld %d %s%s\n", c, gettime(philo), philo->id + 1, str, RESET);
-	pthread_mutex_unlock(&philo->Mesa->somebody_died);
+	pthread_mutex_unlock(&philo->Mesa->print);
 }
