@@ -20,6 +20,7 @@ void	more_mutex_init(t_mesa *mesa)
 	pthread_mutex_init(&mesa->full, NULL);
 	pthread_mutex_init(&mesa->full_check, NULL);
 	pthread_mutex_init(&mesa->print, NULL);
+	pthread_mutex_init(&mesa->can_eat, NULL);
 }
 
 void	mutex_init(t_mesa *mesa)
@@ -44,6 +45,7 @@ void	more_mutex_destroy(t_mesa *mesa)
 	pthread_mutex_destroy(&mesa->full);
 	pthread_mutex_destroy(&mesa->full_check);
 	pthread_mutex_destroy(&mesa->print);
+	pthread_mutex_destroy(&mesa->can_eat);
 }
 
 void	mutex_destroy(t_mesa *mesa)

@@ -55,8 +55,14 @@ typedef struct s_mesa
 	pthread_mutex_t full;
 	pthread_mutex_t full_check;
 	pthread_mutex_t print;
+	pthread_mutex_t can_eat;
 	int	died;
 }		t_mesa;
+
+// in main.c
+
+int	full(t_philo *philo);
+// ---------------
 
 // in mutex_utils.c
 

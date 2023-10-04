@@ -38,13 +38,20 @@ void par(t_philo *philo)
 
 void eating(t_philo *philo)
 {
+	int notepme = philo->Mesa->notepme;
+	pthread_mutex_lock(&philo->Mesa->can_eat);
+	if (philo->times_eaten == notepme)
+	{
+		pthread_mutex_unlock(&philo->Mesa->can_eat);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->Mesa->can_eat);
 	p_state(philo, BYELLOW, "is eating");
 	usleep(philo->Mesa->tte * 1000);
 	pthread_mutex_lock(&philo->Mesa->getime);
 	philo->last_eaten = gettime(philo);
 	pthread_mutex_unlock(&philo->Mesa->getime);
 	pthread_mutex_lock(&philo->Mesa->full);
-	int notepme = philo->Mesa->notepme;
 	if (notepme > 0)
 		philo->times_eaten++;
 	pthread_mutex_unlock(&philo->Mesa->full);
@@ -73,10 +80,18 @@ int check_died(t_philo *philo)
 		pthread_mutex_unlock(&philo->Mesa->check);
 		// mutex_destroy(philo->Mesa);
 		return (1);
-		// exit (0);
 	}
 	pthread_mutex_unlock(&philo->Mesa->check);
 	return (0);
+}
+
+// separate the ohilos
+void par_impar(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+		par(philo);
+	else if (philo->id % 2 != 0)
+		impar(philo);
 }
 
 void *routine(void *arg)
@@ -89,18 +104,16 @@ void *routine(void *arg)
 	philo->times_eaten = 0;
 	while (1)
 	{
-		if (philo->id % 2 == 0)
-			par(philo);
-		else if (philo->id % 2 != 0)
-			impar(philo);
-		/* if (philo->id + 1 % 2 == 0)
-			usleep(100); */
-		// comer dormir pensar
+		par_impar(philo);
 		if (check_died(philo))
-			break ;
+			break;
+		/* if (full(philo))
+			break; */
 		eating(philo);
 		if (check_died(philo))
-			break ;
+			break;
+		/* if (full(philo))
+			break; */
 		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]); //! <---- FIX THIS UNLOCKS
 		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]); //! <---- FIX THIS UNLOCKS
 		my_sleep(philo);

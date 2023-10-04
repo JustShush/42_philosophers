@@ -42,8 +42,7 @@ int	die(t_philo *philo)
 	while (i < philo->Mesa->n_philo)
 	{
 		//printf("gettime:%ld | philo->last_eaten: %ld | philo->Mesa->ttd: %d\n", gettime(philo), philo->last_eaten, philo->Mesa->ttd + 1);
-		if (pthread_mutex_lock(&philo->Mesa->getime) != 0)
-			printf("file:%s | line:%d", __FILE__, __LINE__);
+		pthread_mutex_lock(&philo->Mesa->getime);
 		//printf("run:%ld\n", philo->Mesa->start_run);
 		if (gettime(philo) > (philo->last_eaten + philo->Mesa->ttd + 1))
 		{
@@ -52,14 +51,12 @@ int	die(t_philo *philo)
 				+ 1, RESET);
 			philo->Mesa->died = 1;
 			pthread_mutex_unlock(&philo->Mesa->check);
-			if (pthread_mutex_unlock(&philo->Mesa->getime) != 0)
-				printf("file:%s | line:%d", __FILE__, __LINE__);
+			pthread_mutex_unlock(&philo->Mesa->getime);
 			return (1);
 		}
 		i++;
 		//pthread_mutex_unlock(&philo->Mesa->somebody_died);
-		if (pthread_mutex_unlock(&philo->Mesa->getime) != 0)
-			printf("file:%s | line:%d", __FILE__, __LINE__);
+		pthread_mutex_unlock(&philo->Mesa->getime);
 	}
 	return (0);
 }
@@ -75,9 +72,11 @@ t_philo	philo_mesa_init(t_mesa *mesa)
 int	full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->Mesa->full_check);
-	// /printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
+	//printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
 	if (philo->Mesa->all_full == philo->Mesa->n_philo)
 	{
+		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
+		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
 		pthread_mutex_unlock(&philo->Mesa->full_check);
 		return (1);
 	}
@@ -85,15 +84,19 @@ int	full(t_philo *philo)
 	return (0);
 }
 
-void	*check_thread(void *arg){
+void	*check_thread(void *arg)
+{
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	while (1)
 	{
+		if (full(philo))
+			break ;
 		//printf("|die%d|\n", full(philo));
-		if (die(philo) || full(philo))
+		if (die(philo))
 		{
+			//printf("\n\nend!\n\n");
 			break ;
 			//return (0);
 		}
@@ -126,7 +129,6 @@ int	create_threads(t_mesa *mesa)
 		if (pthread_join(mesa->thread[i], NULL) != 0)
 			return (1);
 		i++;
-		//printf("control.\n");
 	}
 	return (0);
 }
