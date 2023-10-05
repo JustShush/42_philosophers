@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/25 17:44:15 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/05 17:40:15 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	parse_arg(int argc, char *argv[], t_mesa *mesa)
 		mesa->tte = ft_atoi(argv[3]);
 		mesa->tts = ft_atoi(argv[4]);
 	}
-	if (argv[5])
+	if (argv[5] && ft_atoi(argv[5]) > 0)
 		mesa->notepme = ft_atoi(argv[5]); // e se agrv[5] for 0????
 	else
 		mesa->notepme = -1;
@@ -72,15 +72,27 @@ t_philo	philo_mesa_init(t_mesa *mesa)
 int	full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->Mesa->full_check);
+	int notepme = philo->Mesa->notepme;
+	if (philo->times_eaten == notepme) {
+		pthread_mutex_unlock(&philo->Mesa->full_check);
+		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
+		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->Mesa->full_check);
+	/* pthread_mutex_lock(&philo->Mesa->full_check);
 	//printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
 	if (philo->Mesa->all_full == philo->Mesa->n_philo)
 	{
 		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
 		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
+		pthread_mutex_lock(&philo->Mesa->check);
+		philo->Mesa->died = 1;
+		pthread_mutex_unlock(&philo->Mesa->check);
 		pthread_mutex_unlock(&philo->Mesa->full_check);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->Mesa->full_check);
+	pthread_mutex_unlock(&philo->Mesa->full_check); */
 	return (0);
 }
 
@@ -93,10 +105,8 @@ void	*check_thread(void *arg)
 	{
 		if (full(philo))
 			break ;
-		//printf("|die%d|\n", full(philo));
 		if (die(philo))
 		{
-			//printf("\n\nend!\n\n");
 			break ;
 			//return (0);
 		}
@@ -111,6 +121,7 @@ int	create_threads(t_mesa *mesa)
 	i = 0;
 	mesa->philo = (t_philo *)malloc(sizeof(t_philo) * mesa->n_philo);
 	mesa->thread = malloc(sizeof(pthread_t) * mesa->n_philo);
+	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
 	while (i < mesa->n_philo)
 	{
 		mesa->philo[i] = philo_mesa_init(mesa);
@@ -121,8 +132,6 @@ int	create_threads(t_mesa *mesa)
 			return (1);
 		i++;
 	}
-	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
-	pthread_join(mesa->check_thread, NULL);
 	i = 0;
 	while (i < mesa->n_philo)
 	{
@@ -130,6 +139,7 @@ int	create_threads(t_mesa *mesa)
 			return (1);
 		i++;
 	}
+	pthread_join(mesa->check_thread, NULL);
 	return (0);
 }
 
