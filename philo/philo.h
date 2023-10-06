@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:53:13 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/25 17:38:49 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:46:19 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	mutex_destroy(t_mesa *mesa);
 // in routine.c
 
 void	*routine(void *arg);
+void	unlock_forks(t_philo *philo);
 // ---------------
 
 // in utils.c

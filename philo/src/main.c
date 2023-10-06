@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/05 17:40:15 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/06 16:02:07 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,9 @@ int	die(t_philo *philo)
 	int i;
 
 	i = 0;
-	//printf("%p\n", &philo->Mesa->somebody_died);
 	while (i < philo->Mesa->n_philo)
 	{
-		//printf("gettime:%ld | philo->last_eaten: %ld | philo->Mesa->ttd: %d\n", gettime(philo), philo->last_eaten, philo->Mesa->ttd + 1);
 		pthread_mutex_lock(&philo->Mesa->getime);
-		//printf("run:%ld\n", philo->Mesa->start_run);
 		if (gettime(philo) > (philo->last_eaten + philo->Mesa->ttd + 1))
 		{
 			pthread_mutex_lock(&philo->Mesa->check);
@@ -71,25 +68,26 @@ t_philo	philo_mesa_init(t_mesa *mesa)
 
 int	full(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->Mesa->full_check);
 	int notepme = philo->Mesa->notepme;
+	pthread_mutex_lock(&philo->Mesa->full);
 	if (philo->times_eaten == notepme) {
-		pthread_mutex_unlock(&philo->Mesa->full_check);
-		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
-		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
+		unlock_forks(philo);
+		pthread_mutex_unlock(&philo->Mesa->full);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->Mesa->full_check);
-	/* pthread_mutex_lock(&philo->Mesa->full_check);
-	//printf("all-full:%d | n_philo:%d\n", philo->Mesa->all_full, philo->Mesa->n_philo);
-	if (philo->Mesa->all_full == philo->Mesa->n_philo)
-	{
-		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
-		//pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
-		pthread_mutex_lock(&philo->Mesa->check);
-		philo->Mesa->died = 1;
-		pthread_mutex_unlock(&philo->Mesa->check);
+	pthread_mutex_unlock(&philo->Mesa->full);
+	/* pthread_mutex_lock(&philo->Mesa->full);
+	if (philo->times_eaten == notepme) {
+		pthread_mutex_lock(&philo->Mesa->full_check);
+		philo->Mesa->all_full++;
 		pthread_mutex_unlock(&philo->Mesa->full_check);
+	}
+	pthread_mutex_unlock(&philo->Mesa->full);
+	pthread_mutex_lock(&philo->Mesa->full_check);
+	if (philo->Mesa->all_full >= philo->Mesa->n_philo)
+	{
+		pthread_mutex_unlock(&philo->Mesa->full_check);
+		unlock_forks(philo);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->Mesa->full_check); */
@@ -103,12 +101,13 @@ void	*check_thread(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
+		if (philo->Mesa->n_philo == 1)
+			break ;
 		if (full(philo))
 			break ;
 		if (die(philo))
 		{
 			break ;
-			//return (0);
 		}
 	}
 	return (0);

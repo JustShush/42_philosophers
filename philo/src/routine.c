@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 14:16:17 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/05 17:48:08 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/06 16:21:37 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,7 @@ void	unlock_forks(t_philo *philo)
 
 void eating(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->Mesa->full_check);
 	int notepme = philo->Mesa->notepme;
-	/* if (philo->times_eaten == notepme)
-	{
-		pthread_mutex_unlock(&philo->Mesa->full_check);
-		return ;
-	} */
-	pthread_mutex_unlock(&philo->Mesa->full_check);
 	p_state(philo, PURPLE, "has taken a fork");
 	p_state(philo, PURPLE, "has taken a fork");
 	p_state(philo, BYELLOW, "is eating");
@@ -67,19 +60,17 @@ void eating(t_philo *philo)
 	if (notepme > 0)
 		philo->times_eaten++;
 	pthread_mutex_unlock(&philo->Mesa->full);
+	pthread_mutex_lock(&philo->Mesa->full_check);
+	if (philo->times_eaten == notepme)
+		philo->Mesa->all_full++;
+	pthread_mutex_unlock(&philo->Mesa->full_check);
 	pthread_mutex_lock(&philo->Mesa->getime);
 	philo->last_eaten = gettime(philo);
 	pthread_mutex_unlock(&philo->Mesa->getime);
-	/* pthread_mutex_lock(&philo->Mesa->full_check);
-	if (philo->times_eaten == notepme)
-		philo->Mesa->all_full++;
-	pthread_mutex_unlock(&philo->Mesa->full_check); */
 }
 
 void my_sleep(t_philo *philo)
 {
-	/* printf("%s%ld %d is sleeping\n%s", BCYAN, gettime(philo->Mesa), philo->id
-		+ 1, RESET); */
 	p_state(philo, BCYAN, "is sleeping");
 	usleep(philo->Mesa->tts * 1000);
 	p_state(philo, BGREEN, "is thinking");
@@ -90,10 +81,8 @@ int check_died(t_philo *philo)
 	pthread_mutex_lock(&philo->Mesa->check);
 	if (philo->Mesa->died)
 	{
-		// printf("someonde ided: %d\n", philo->Mesa->died);
 		pthread_mutex_unlock(&philo->Mesa->check);
 		unlock_forks(philo);
-		// mutex_destroy(philo->Mesa);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->Mesa->check);
@@ -120,6 +109,31 @@ void par_impar(t_philo *philo)
 	p_state(philo, PURPLE, "has taken a fork"); */
 }
 
+int	check_one(t_philo *philo)
+{
+	if (philo->Mesa->n_philo == 1)
+	{
+		p_state(philo, PURPLE, "has taken a fork");
+		usleep(philo->Mesa->ttd * 1000);
+		p_state(philo, BIRED, "died");
+		return (1);
+	}
+	return (0);
+}
+
+int	check_full(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->Mesa->full_check);
+	if (philo->Mesa->all_full == philo->Mesa->n_philo)
+	{
+		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
+		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
+		pthread_mutex_unlock(&philo->Mesa->full_check);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->Mesa->full_check);
+	return (0);
+}
 
 void *routine(void *arg)
 {
@@ -131,12 +145,14 @@ void *routine(void *arg)
 	philo->times_eaten = 0;
 	while (1)
 	{
+		if (check_one(philo))
+			break ;
 		par_impar(philo);
 		if (check_died(philo) || full(philo))
-			break;
+			break ;
 		eating(philo);
-		if (check_died(philo) || full(philo))
-			break;
+		if (check_died(philo))
+			break ;
 		unlock_forks(philo);
 		my_sleep(philo);
 	}
