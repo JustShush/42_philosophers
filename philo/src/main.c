@@ -70,27 +70,28 @@ int	full(t_philo *philo)
 {
 	int notepme = philo->Mesa->notepme;
 	pthread_mutex_lock(&philo->Mesa->full);
-	if (philo->times_eaten == notepme) {
+	if (philo->times_eaten == notepme)
+	{
 		unlock_forks(philo);
 		pthread_mutex_unlock(&philo->Mesa->full);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->Mesa->full);
+	/* pthread_mutex_lock(&philo->Mesa->full_check);
+	if (philo->Mesa->all_full == philo->Mesa->notepme)
+	{
+		unlock_forks(philo);
+		pthread_mutex_unlock(&philo->Mesa->full_check);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->Mesa->full_check); */
 	/* pthread_mutex_lock(&philo->Mesa->full);
 	if (philo->times_eaten == notepme) {
 		pthread_mutex_lock(&philo->Mesa->full_check);
 		philo->Mesa->all_full++;
 		pthread_mutex_unlock(&philo->Mesa->full_check);
 	}
-	pthread_mutex_unlock(&philo->Mesa->full);
-	pthread_mutex_lock(&philo->Mesa->full_check);
-	if (philo->Mesa->all_full >= philo->Mesa->n_philo)
-	{
-		pthread_mutex_unlock(&philo->Mesa->full_check);
-		unlock_forks(philo);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->Mesa->full_check); */
+	pthread_mutex_unlock(&philo->Mesa->full); */
 	return (0);
 }
 

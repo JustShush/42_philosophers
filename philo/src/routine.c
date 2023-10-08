@@ -89,7 +89,7 @@ int check_died(t_philo *philo)
 	return (0);
 }
 
-// separate the ohilos
+// separate the philos
 void par_impar(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
@@ -126,8 +126,7 @@ int	check_full(t_philo *philo)
 	pthread_mutex_lock(&philo->Mesa->full_check);
 	if (philo->Mesa->all_full == philo->Mesa->n_philo)
 	{
-		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_r]);
-		pthread_mutex_unlock(&philo->Mesa->mutex_fork[philo->fork_l]);
+		unlock_forks(philo);
 		pthread_mutex_unlock(&philo->Mesa->full_check);
 		return (1);
 	}
@@ -151,7 +150,7 @@ void *routine(void *arg)
 		if (check_died(philo) || full(philo))
 			break ;
 		eating(philo);
-		if (check_died(philo))
+		if (check_died(philo) || check_full(philo))
 			break ;
 		unlock_forks(philo);
 		my_sleep(philo);
