@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/25 17:39:01 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/13 11:13:23 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,12 @@ int	error(int op, char *arg)
 	return (1);
 }
 
-time_t	baittime(void)
+t_philo	philo_mesa_init(t_mesa *mesa)
 {
-	struct timeval	time;
+	t_philo	test;
 
-	gettimeofday(&time, NULL);
-	return (((time.tv_sec * 1000) + (time.tv_usec / 1000)));
-}
-
-// get time in ms
-time_t	gettime(t_philo *philo)
-{
-	return (baittime() - philo->Mesa->start_run);
+	test._mesa = mesa;
+	return (test);
 }
 
 void	vars_init(t_mesa *mesa)
@@ -58,7 +52,7 @@ void	free_thread(t_mesa *mesa)
 
 void	p_state(t_philo *philo, char *c, char *str)
 {
-	pthread_mutex_lock(&philo->Mesa->print);
+	pthread_mutex_lock(&philo->_mesa->print);
 	printf("%s%ld %d %s%s\n", c, gettime(philo), philo->id + 1, str, RESET);
-	pthread_mutex_unlock(&philo->Mesa->print);
+	pthread_mutex_unlock(&philo->_mesa->print);
 }

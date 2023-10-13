@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 12:22:27 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/25 17:58:31 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/13 11:02:14 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	more_mutex_init(t_mesa *mesa)
 
 void	mutex_init(t_mesa *mesa)
 {
-	int i;
+	int	i;
 
 	mesa->mutex_fork = malloc(sizeof(pthread_mutex_t) * mesa->n_philo);
 	i = 0;
@@ -50,7 +50,7 @@ void	more_mutex_destroy(t_mesa *mesa)
 
 void	mutex_destroy(t_mesa *mesa)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < mesa->n_philo)
