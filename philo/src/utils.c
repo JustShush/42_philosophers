@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/13 11:13:23 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:44:09 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	error(int op, char *arg)
 {
 	if (op == 0)
+	{
+		printf("%sERROR%s: %s\n", BRED, RESET, arg);
 		return (0);
+	}
 	if (op == 1 && arg)
 	{
 		printf("%sERROR%s: %s", BRED, RESET, arg);

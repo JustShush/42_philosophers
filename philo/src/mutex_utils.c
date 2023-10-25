@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 12:22:27 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/13 11:02:14 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:50:49 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	mutex_init(t_mesa *mesa)
 	int	i;
 
 	mesa->mutex_fork = malloc(sizeof(pthread_mutex_t) * mesa->n_philo);
+	if (!mesa->mutex_fork)
+		return ;
 	i = 0;
 	while (i < mesa->n_philo)
 	{

@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/13 12:10:02 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:45:49 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,18 @@ int	parse_arg(int argc, char *argv[], t_mesa *mesa)
 	}
 	if (argv[1] && argv[2] && argv[3] && argv[4])
 	{
+		if (valid_args(argv[1]) || valid_args(argv[2]) || \
+		valid_args(argv[3]) || valid_args(argv[4]))
+			return (1);
 		mesa->n_philo = ft_atoi(argv[1]);
 		mesa->ttd = ft_atoi(argv[2]);
 		mesa->tte = ft_atoi(argv[3]);
 		mesa->tts = ft_atoi(argv[4]);
 	}
+	if (argv[5] && valid_args(argv[5]))
+		return (1);
 	if (argv[5] && ft_atoi(argv[5]) > 0)
-		mesa->notepme = ft_atoi(argv[5]); // e se agrv[5] for 0????
+		mesa->notepme = ft_atoi(argv[5]);
 	else
 		mesa->notepme = -1;
 	return (0);
@@ -108,7 +113,10 @@ int	main(int argc, char *argv[])
 
 	vars_init(&mesa);
 	if (parse_arg(argc, argv, &mesa))
-		return (error(0, NULL));
+	{
+		error(0, "Invalid Args!");
+		return (0);
+	}
 	mutex_init(&mesa);
 	mesa.start_run = baittime();
 	if (create_threads(&mesa))

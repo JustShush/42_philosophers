@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 11:09:23 by dimarque          #+#    #+#             */
-/*   Updated: 2023/09/11 11:09:57 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:43:38 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@
 # define INT_MIN -2147483648
 
 int	ft_atoi(const char *str);
+int	ft_isdigit(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 10:49:57 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/13 15:56:01 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:00:40 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ void	*routine(void *arg)
 			break ;
 		unlock_forks(philo);
 		my_sleep(philo);
+		if (check_died(philo) || check_full(philo))
+			break ;
+		p_state(philo, BGREEN, "is thinking");
 	}
 	return (0);
 }
