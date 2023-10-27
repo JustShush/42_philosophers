@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/27 18:27:32 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 19:17:48 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	parse_arg(int argc, char *argv[], t_mesa *mesa)
 	}
 	if (argv[1] && argv[2] && argv[3] && argv[4])
 	{
-		if (valid_args(argv[1]) || valid_args(argv[2]) || \
-		valid_args(argv[3]) || valid_args(argv[4]))
+		if ((valid_args(argv[1]) && ft_strlen(argv[1]) > 3) || \
+		valid_args(argv[2]) || valid_args(argv[3]) || valid_args(argv[4]))
 			return (1);
 		mesa->n_philo = ft_atoi(argv[1]);
 		mesa->ttd = ft_atoi(argv[2]);
@@ -78,13 +78,6 @@ int	full(t_philo *philo)
 	return (0);
 }
 
-void	philo_init(t_mesa *mesa, int i)
-{
-	mesa->philo[i].id = i;
-	mesa->philo[i].last_eaten = 0;
-	mesa->philo[i].times_eaten = 0;
-}
-
 int	create_threads(t_mesa *mesa)
 {
 	int	i;
@@ -96,8 +89,6 @@ int	create_threads(t_mesa *mesa)
 	{
 		mesa->philo[i] = philo_mesa_init(mesa);
 		philo_init(mesa, i);
-		/* mesa->philo[i].id = i;
-		mesa->philo[i].last_eaten = 0; */
 		if (pthread_create(&mesa->thread[i], NULL, routine,
 				&mesa->philo[i]) != 0)
 			return (1);

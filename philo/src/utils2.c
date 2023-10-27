@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 10:52:38 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/27 18:58:06 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 19:16:09 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ void	unlock_forks(t_philo *philo)
 		pthread_mutex_unlock(&philo->_mesa->mutex_fork[philo->fork_r]);
 		pthread_mutex_unlock(&philo->_mesa->mutex_fork[philo->fork_l]);
 	}
+}
+
+void	philo_init(t_mesa *mesa, int i)
+{
+	mesa->philo[i].id = i;
+	mesa->philo[i].last_eaten = 0;
+	mesa->philo[i].times_eaten = 0;
 }
 
 int	valid_args(char *str)

@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:53:13 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/27 18:30:51 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 19:16:22 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	p_state(t_philo *philo, char *c, char *str);
 int		check_one(t_philo *philo);
 int		check_died(t_philo *philo);
 void	unlock_forks(t_philo *philo);
+void	philo_init(t_mesa *mesa, int i);
 int		valid_args(char *str);
 // ---------------
 

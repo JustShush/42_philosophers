@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 18:58:35 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/27 18:59:31 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 19:11:05 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_strlen(char *str)
 {
-	int i;
-	
+	int	i;
+
 	if (!str)
 		return (0);
 	i = 0;

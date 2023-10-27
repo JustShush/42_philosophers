@@ -1,5 +1,10 @@
+philo
+
 # Ignore Obj folder
 obj/
+
+# Ignore Ctrl + Z
+.nfs*
 
 ### C ###
 # Prerequisites
