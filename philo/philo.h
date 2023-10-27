@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:53:13 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/25 15:44:58 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:30:51 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_mesa
 	pthread_mutex_t	check_fork;
 	pthread_mutex_t	full;
 	pthread_mutex_t	full_check;
-	pthread_mutex_t	print;
 	pthread_mutex_t	can_eat;
 	int				died;
 }		t_mesa;

@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 12:46:32 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/25 15:44:09 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:29:53 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	free_thread(t_mesa *mesa)
 
 void	p_state(t_philo *philo, char *c, char *str)
 {
-	pthread_mutex_lock(&philo->_mesa->print);
+	pthread_mutex_lock(&philo->_mesa->getime);
 	printf("%s%ld %d %s%s\n", c, gettime(philo), philo->id + 1, str, RESET);
-	pthread_mutex_unlock(&philo->_mesa->print);
+	pthread_mutex_unlock(&philo->_mesa->getime);
 }

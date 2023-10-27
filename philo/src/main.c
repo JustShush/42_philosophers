@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 10:45:54 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/25 15:45:49 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:27:32 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,13 @@ int	full(t_philo *philo)
 	return (0);
 }
 
+void	philo_init(t_mesa *mesa, int i)
+{
+	mesa->philo[i].id = i;
+	mesa->philo[i].last_eaten = 0;
+	mesa->philo[i].times_eaten = 0;
+}
+
 int	create_threads(t_mesa *mesa)
 {
 	int	i;
@@ -85,17 +92,18 @@ int	create_threads(t_mesa *mesa)
 	i = 0;
 	mesa->philo = (t_philo *)malloc(sizeof(t_philo) * mesa->n_philo);
 	mesa->thread = malloc(sizeof(pthread_t) * mesa->n_philo);
-	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
 	while (i < mesa->n_philo)
 	{
 		mesa->philo[i] = philo_mesa_init(mesa);
-		mesa->philo[i].id = i;
-		mesa->philo[i].last_eaten = 0;
+		philo_init(mesa, i);
+		/* mesa->philo[i].id = i;
+		mesa->philo[i].last_eaten = 0; */
 		if (pthread_create(&mesa->thread[i], NULL, routine,
 				&mesa->philo[i]) != 0)
 			return (1);
 		i++;
 	}
+	pthread_create(&mesa->check_thread, NULL, check_thread, mesa->philo);
 	i = 0;
 	while (i < mesa->n_philo)
 	{

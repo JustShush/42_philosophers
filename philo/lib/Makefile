@@ -7,7 +7,8 @@ CFLAGS = -Wall -Wextra -Werror
 NAME = lib.a
 
 SRC =	ft_atoi.c	\
-		ft_isdigit.c
+		ft_isdigit.c	\
+		ft_strlen.c
 
 OBJ = $(SRC:.c=.o)
 

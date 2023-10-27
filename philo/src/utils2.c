@@ -6,7 +6,7 @@
 /*   By: dimarque <dimarque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 10:52:38 by dimarque          #+#    #+#             */
-/*   Updated: 2023/10/25 15:45:19 by dimarque         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:58:06 by dimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	check_one(t_philo *philo)
 {
 	if (philo->_mesa->n_philo == 1)
 	{
+		pthread_mutex_lock(&philo->_mesa->mutex_fork[philo->id]);
 		p_state(philo, PURPLE, "has taken a fork");
 		usleep(philo->_mesa->ttd * 1000);
 		p_state(philo, BIRED, "died");
@@ -54,6 +55,10 @@ void	unlock_forks(t_philo *philo)
 int	valid_args(char *str)
 {
 	if (!ft_isdigit(str))
+		return (1);
+	if (ft_atoi(str) <= 0)
+		return (1);
+	if (ft_strlen(str) >= 5)
 		return (1);
 	return (0);
 }
