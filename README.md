@@ -1,11 +1,11 @@
 <h1>
 	<p align="center">42_philosophers</p>
-	<!-- <img align="right" alt="Final Grade: 84/ 100%" src="https://img.shields.io/badge/-%2084%20%2F%20100-success"> -->
+	<img align="right" alt="Final Grade: 84/ 100%" src="https://img.shields.io/badge/-%20100%20%2F%20100-success">
 	<!--
 		%20 => space
 		%2F => slash(/)
 	-->
-  <img align="right" alt="Project in progress" src="https://img.shields.io/badge/-Project%20In%20Progress-red">
+  <!-- <img align="right" alt="Project in progress" src="https://img.shields.io/badge/-Project%20In%20Progress-red"> -->
 </h1>
 
 <p align="center">
